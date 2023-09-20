@@ -35,6 +35,13 @@ sleep(0.5)
 next_button = navegador.find_element(By.TAG_NAME, 'button')[-1]
 next_button.click()
 
+# definir 2 adultos
+adult_button = navegador.find_element(By.CSS_SELECTOR, 'button > span > svg > path[d="m2 16h28m-14-14v28"]')[0]
+adult_button.click()
+sleep(1)
+adult_button.click()
+sleep(1)
+
 # clicar no último botão da página (search button)
 search_button = navegador.find_element(By.TAG_NAME, 'button')[-1]
 search_button.click()
@@ -43,8 +50,19 @@ sleep(4)
 
 # converter em objeto beautifulsoap
 page_content = navegador.page_source
-
 site = BeautifulSoup(page_content, 'html.parser')
+
+# pegar os apartamentos
+hospedagem = site.find('div', attrs = {'itemprop': 'itemListElement'})
+# print(hospedagem.prettify())
+
+# pegar o nome do primeiro apartamento
+hospedagem_descricao = hospedagem.find('meta', attrs = {"itemprop": 'name'})
+hospedagem_url = hospedagem.find('meta', attrs = {"itemprop": 'url'})
+print('Descrição: ', hospedagem_descricao['content']) # printar só o nome do primeiro apartamento
+print('URL: ', hospedagem_url['content'])
+
+hospedagem_detalhes = hospedagem.find('div', attrs = {'style': 'margin-bottom: 2px;'}).findAll('li')
 
 # print(input_place)
 # print(navegador.page_source) # ver o código da página
