@@ -7,43 +7,64 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 # parte do selenium
 
 options = Options()
-# options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
+options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
 options.add_argument('window-size=400,800') # define o tamanho da tela
 
 navegador = webdriver.Chrome(options = options)
-navegador.get('https://www.airbnb.com.br/?_set_bev_on_new_domain=1695251287_MjE0NTkzMWIyMTdm')
+navegador.get('https://www.airbnb.com.br/')
 
 sleep(2)
 
-input_place = navegador.find_element(By.TAG_NAME, 'input')
-input_place.send_keys('São Paulo')
-input_place.submit() # enter
+# form
+
+
+# printar o código da página
+# print(BeautifulSoup(navegador.page_source, 'html.parser').prettify())
+
+# clicar no campo que tem que pesquisar
+qualquer_lugar = navegador.find_element(By.CSS_SELECTOR, 'button')
+qualquer_lugar.click()
+
+sleep(1)
+
+# encontrar o elemento de entrada dentro do formulário
+form = navegador.find_element(By.TAG_NAME, 'form')
+
+# colocar o input
+input_place = form.find_element(By.TAG_NAME, 'input')
+# input_place.clear()
+# input_place.send_keys(Keys.ENTER)
+form.submit()
 
 sleep(0.5)
 
-# clicar no primeiro botão que tem uma imagem dentro
-button_stay = navegador.find_element(By.CSS_SELECTOR, 'button > img')
-button_stay.click()
+# # clicar no primeiro botão que tem uma imagem dentro
+# button_stay = navegador.find_element(By.CSS_SELECTOR, 'button > img')
+# button_stay.click()
 
-sleep(0.5)
+# sleep(0.5)
+
+# print(BeautifulSoup(navegador.page_source, 'html.parser').prettify())
 
 # clicar no último botão da página (next button)
-next_button = navegador.find_element(By.TAG_NAME, 'button')[-1]
+next_button = navegador.find_element(By.CSS_SELECTOR, 'button > div[data-testid="dates-footer-primary-btn"]')
 next_button.click()
 
-# definir 2 adultos
-adult_button = navegador.find_element(By.CSS_SELECTOR, 'button > span > svg > path[d="m2 16h28m-14-14v28"]')[0]
+
+# # definir 2 adultos
+adult_button = navegador.find_element(By.CSS_SELECTOR, 'button > span > svg > path[d="m6.75.75v4.5h4.5v1.5h-4.5v4.5h-1.5v-4.5h-4.5v-1.5h4.5v-4.5z"]')
 adult_button.click()
 sleep(1)
 adult_button.click()
 sleep(1)
 
-# clicar no último botão da página (search button)
-search_button = navegador.find_element(By.TAG_NAME, 'button')[-1]
+# # clicar no último botão da página (search button)
+search_button = navegador.find_element(By.CSS_SELECTOR, 'button > span[class="tb4j57x dir dir-ltr"]')
 search_button.click()
 
 sleep(4)
@@ -53,23 +74,41 @@ page_content = navegador.page_source
 site = BeautifulSoup(page_content, 'html.parser')
 
 # pegar os apartamentos
-hospedagem = site.find('div', attrs = {'itemprop': 'itemListElement'})
-# print(hospedagem.prettify())
+hospedagens = site.findAll('div', attrs = {'itemprop': 'itemListElement'})
+print(hospedagens.prettify())
 
-# pegar o nome do primeiro apartamento
-hospedagem_descricao = hospedagem.find('meta', attrs = {"itemprop": 'name'})
-hospedagem_url = hospedagem.find('meta', attrs = {"itemprop": 'url'})
-print('Descrição: ', hospedagem_descricao['content']) # printar só o nome do primeiro apartamento
-print('URL: ', hospedagem_url['content'])
+# for hospedagem in hospedagens:
 
-hospedagem_detalhes = hospedagem.find('div', attrs = {'style': 'margin-bottom: 2px;'}).findAll('li')
+#     # pegar o nome e a URL do primeiro apartamento
+#     hospedagem_descricao = hospedagem.find('meta', attrs = {"itemprop": 'name'})
+#     hospedagem_url = hospedagem.find('meta', attrs = {"itemprop": 'url'})
+#     print('Descrição: ', hospedagem_descricao['content']) # printar só o nome do primeiro apartamento
+#     print('URL: ', hospedagem_url['content'])
+
+#     hospedagem_detalhes = hospedagem.find('div', attrs = {'style': 'margin-bottom: 2px;'}).findAll('li')
+
+#     # pegar todas as informações
+
+#     # 1. de forma manual
+#     # hospedagem_detalhes = hospedagem_detalhes[0].text + hospedagem_detalhes[1].text
+
+#     # 2. com loop - compressão de listas
+#     hospedagem_detalhes = ''.join([detalhe.text for detalhe in hospedagem_detalhes])
+
+#     print('Detalhes da hospedagem: ', hospedagem_detalhes)
+
+#     # pegar a info de preço
+#     preco = hospedagem.findAll('span')[-1].text
+
+#     print('Preço da hospedagem: ', preco)
+
+#     print()
 
 # print(input_place)
 # print(navegador.page_source) # ver o código da página
 # parte do beautifulsoap
 
-# site = BeautifulSoup(navegador.page_source, 'html.parser')
-# print(site.prettify())
+
 
 
 
