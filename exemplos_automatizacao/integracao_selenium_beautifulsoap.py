@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import pandas as pd
 
 # parte do selenium
 
@@ -19,9 +20,6 @@ navegador = webdriver.Chrome(options = options)
 navegador.get('https://www.airbnb.com.br/')
 
 sleep(2)
-
-# form
-
 
 # printar o código da página
 # print(BeautifulSoup(navegador.page_source, 'html.parser').prettify())
@@ -55,7 +53,6 @@ sleep(0.5)
 next_button = navegador.find_element(By.CSS_SELECTOR, 'button > div[data-testid="dates-footer-primary-btn"]')
 next_button.click()
 
-
 # # definir 2 adultos
 adult_button = navegador.find_element(By.CSS_SELECTOR, 'button > span > svg > path[d="m6.75.75v4.5h4.5v1.5h-4.5v4.5h-1.5v-4.5h-4.5v-1.5h4.5v-4.5z"]')
 adult_button.click()
@@ -73,42 +70,51 @@ sleep(4)
 page_content = navegador.page_source
 site = BeautifulSoup(page_content, 'html.parser')
 
+# criar uma lista vazia para colocar os dados printados depois
+dados_hospedagens = []
+
+# print(site.prettify())
+
 # pegar os apartamentos
 hospedagens = site.findAll('div', attrs = {'itemprop': 'itemListElement'})
-print(hospedagens.prettify())
+# print(hospedagens.prettify())
 
-# for hospedagem in hospedagens:
+for hospedagem in hospedagens:
 
-#     # pegar o nome e a URL do primeiro apartamento
-#     hospedagem_descricao = hospedagem.find('meta', attrs = {"itemprop": 'name'})
-#     hospedagem_url = hospedagem.find('meta', attrs = {"itemprop": 'url'})
-#     print('Descrição: ', hospedagem_descricao['content']) # printar só o nome do primeiro apartamento
-#     print('URL: ', hospedagem_url['content'])
+    # pegar o nome e a URL do primeiro apartamento
+    hospedagem_descricao = hospedagem.find('meta', attrs = {"itemprop": 'name'})
+    hospedagem_url = hospedagem.find('meta', attrs = {"itemprop": 'url'})
 
-#     hospedagem_detalhes = hospedagem.find('div', attrs = {'style': 'margin-bottom: 2px;'}).findAll('li')
+    hospedagem_descricao = hospedagem_descricao['content']
+    hospedagem_url = hospedagem_url['content']
 
-#     # pegar todas as informações
+    print('Descrição: ', hospedagem_descricao) # printar só o nome do primeiro apartamento
+    print('URL: ', hospedagem_url)
+    print()
 
-#     # 1. de forma manual
-#     # hospedagem_detalhes = hospedagem_detalhes[0].text + hospedagem_detalhes[1].text
+    # pegar os detalhes
+    # hospedagem_detalhes = hospedagem.find('div', attrs = {'style': 'margin-bottom: 2px;'}).findAll('li')
 
-#     # 2. com loop - compressão de listas
-#     hospedagem_detalhes = ''.join([detalhe.text for detalhe in hospedagem_detalhes])
+    # 1. de forma manual
+    # hospedagem_detalhes = hospedagem_detalhes[0].text + hospedagem_detalhes[1].text
 
-#     print('Detalhes da hospedagem: ', hospedagem_detalhes)
+    # # 2. com loop - compressão de listas
+    # hospedagem_detalhes = ''.join([detalhe.text for detalhe in hospedagem_detalhes])
+    # print('Detalhes da hospedagem: ', hospedagem_detalhes)
 
-#     # pegar a info de preço
-#     preco = hospedagem.findAll('span')[-1].text
+    # # pegar a info de preço
+    # preco = hospedagem.findAll('span')[-1].text
+    # print('Preço da hospedagem: ', preco)
 
-#     print('Preço da hospedagem: ', preco)
+    # print()
 
-#     print()
+    dados_hospedagens.append([hospedagem_descricao, hospedagem_url])
 
-# print(input_place)
-# print(navegador.page_source) # ver o código da página
-# parte do beautifulsoap
+# colocar em um dataframe
+df = pd.DataFrame(dados_hospedagens, columns = ['Descricao', 'URL'])
 
-
+# salvar como csv
+df.to_csv('hospedagens.csv', index = False)
 
 
 
