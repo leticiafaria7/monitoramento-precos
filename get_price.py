@@ -1,0 +1,68 @@
+
+##################################################################################################################################################################
+# bibliotecas
+##################################################################################################################################################################
+
+import pandas as pd
+import datetime
+
+import requests
+from bs4 import BeautifulSoup
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+from time import sleep
+
+##################################################################################################################################################################
+# parte do selenium
+##################################################################################################################################################################
+
+options = Options()
+options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
+options.add_argument('window-size=1500,800') # define o tamanho da tela
+
+navegador = webdriver.Chrome(options = options)
+navegador.get('https://www.amazon.com.br/Garmin-Forerunner%C2%AE-Music-smartwatch-corrida/dp/B09WTJ48NB')
+
+sleep(2)
+
+# converter em objeto beautifulsoap
+page_content = navegador.page_source
+site = BeautifulSoup(page_content, 'html.parser')
+
+# criar uma lista vazia para colocar os dados printados depois
+monitoramento_preco = []
+
+# pegar o preço no site
+reais = site.find('span', attrs = {'class': 'a-price-whole'})
+centavos = site.find('span', attrs = {'class': 'a-price-fraction'})
+
+# arrumar o preco
+preco = reais.text + centavos.text
+preco = preco.replace(".", "")
+preco = preco.replace(",", ".")
+
+# salvar a data e a hora atual em variáveis
+data = datetime.date.today().strftime("%d/%m/%Y")
+hora = datetime.datetime.now().time().strftime("%H:%M")
+
+# fazer o append na lista
+monitoramento_preco.append([data,
+                            hora,
+                            preco,
+                            'amazon',
+                            'preto'])
+
+# colocar em um dataframe
+df = pd.DataFrame(monitoramento_preco, columns = ['data', 'hora', 'preco', 'site', 'cor'])
+df['preco'] = df['preco'].astype('float')
+
+# chamar a base já existente e concatenar o novo preço
+base = pd.read_excel('assets/base_dados_automatizada.xlsx', 'forerunner_255s', engine = 'openpyxl')
+df = pd.concat([base, df])
+
+# salvar a base
+df.to_excel('assets/base_dados_automatizada.xlsx', sheet_name = 'forerunner_255s', index = False)
