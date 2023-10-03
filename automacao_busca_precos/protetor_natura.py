@@ -16,6 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 from time import sleep
+from formatacao_data_hora import converter_data, converter_hora
 
 ##################################################################################################################################################################
 # parte do selenium
@@ -65,28 +66,8 @@ df = pd.DataFrame(monitoramento_preco, columns = ['data', 'hora', 'preco', 'site
 df['preco'] = df['preco'].astype('float')
 
 # chamar a base já existente e concatenar o novo preço
-base = pd.read_excel('assets/protetor_natura.xlsx', 'protetor_natura', engine = 'openpyxl')
+base = pd.read_excel('../assets/protetor_natura.xlsx', 'protetor_natura', engine = 'openpyxl')
 df = pd.concat([base, df])
-
-# função para converter as datas
-def converter_data(data_str):
-    try:
-        return pd.to_datetime(data_str, format="%Y-%m-%d %H:%M:%S")
-    except ValueError:
-        try:
-            return pd.to_datetime(data_str, format="%d/%m/%Y")
-        except ValueError:
-            return pd.NaT
-        
-# função para converter as horas
-def converter_hora(hora_str):
-    try:
-        return pd.to_datetime(hora_str, format="%H:%M:%S").strftime("%H:%M")
-    except ValueError:
-        try:
-            return pd.to_datetime(hora_str, format="%H:%M").strftime("%H:%M")
-        except ValueError:
-            return pd.NaT
 
 # aplicar as funções ao dataframe
 df['data'] = df['data'].apply(converter_data)
@@ -94,7 +75,7 @@ df['hora'] = df['hora'].apply(converter_hora)
 
 df = df.reset_index(drop = True)
 
-# print(df)
+print(df)
 
 # salvar a base
-df.to_excel('assets/protetor_natura.xlsx', sheet_name = 'protetor_natura', index = False)
+# df.to_excel('../assets/protetor_natura.xlsx', sheet_name = 'protetor_natura', index = False)
