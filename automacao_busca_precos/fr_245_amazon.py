@@ -73,5 +73,7 @@ df['hora'] = df['hora'].apply(converter_hora)
 
 df = df.reset_index(drop = True)
 
+# print(df)
+
 # salvar a base
 df.to_excel('../assets/forerunner_245.xlsx', sheet_name = 'forerunner_245', index = False)
