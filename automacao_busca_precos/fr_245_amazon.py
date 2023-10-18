@@ -22,7 +22,7 @@ from formatacao_data_hora import converter_data, converter_hora
 ##################################################################################################################################################################
 
 options = Options()
-options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
+# options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
 options.add_argument('window-size=1500,800') # define o tamanho da tela
 
 navegador = webdriver.Chrome(options = options)
