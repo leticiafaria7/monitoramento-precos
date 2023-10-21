@@ -1,7 +1,44 @@
-# //div/h6[@class='MuiTypography-root natds1874 natds1876 MuiTypography-h6 MuiTypography-alignLeft']
 
-# https://www.amazon.com.br/dp/B09WTSKRTN/ref=olp-opf-redir?aod=1&ie=UTF8&condition=new&creative=380345&creativeASIN=B09WTSKRTN&linkCode=asm&tag=zoom059-20&ascsubtag=41e46cee9ffd46afbf89cf628b876e27
+################################################################################
+# BIBLIOTECAS
+################################################################################
 
-# https://www.natura.com.br/p/protetor-facial-gel-creme-fps-60-fpuva-20-fotoequilibrio-50-g/103144?listTitle=category%20page%20list%20showcase%20-%20rosto%20-%20protecao%20solar&position=2
+import dash
+from dash import Dash, dcc, html
+from dash.dependencies import Input, Output
+import pandas as pd
+from flask_login import logout_user, current_user
+from views import homepage
+# from callbacks import callbacks_gerais, callbacks_navbar, callbacks_sidebar, callbacks_frases
+from app import app
+import dash_bootstrap_components as dbc
 
+pd.options.mode.chained_assignment = None
+
+################################################################################
+# LAYOUT
+################################################################################
+
+content = html.Div(id = "page-content")
+
+app.layout = dbc.Container(children=[
+    dbc.Row([
+        dbc.Col([
+            dcc.Location(id='url'),
+            content
+        ], md=12, style={'background-color':'transparent', 'height':'1080px'})
+    ])
+], fluid = True) # o conteúdo se espalha ao longo da tela
+
+@app.callback(
+        Output('page-content', 'children'), 
+        [Input('url', 'pathname')]
+)
+
+def render_page(pathname):
+    if pathname == '/' or pathname == '/homepage':
+        return homepage.layout
+
+if __name__ == '__main__':
+    app.run_server(port=8051, debug=True)
 
