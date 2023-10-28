@@ -22,7 +22,7 @@ from formatacao_data_hora import converter_data, converter_hora
 ##################################################################################################################################################################
 
 options = Options()
-# options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
+options.add_argument('--headless') # faz toda a rotina, mas o navegador não abre
 options.add_argument('window-size=1500,800') # define o tamanho da tela
 
 navegador = webdriver.Chrome(options = options)
@@ -73,7 +73,7 @@ df['hora'] = df['hora'].apply(converter_hora)
 
 df = df.reset_index(drop = True)
 
-# print(df)
+print(df)
 
 # salvar a base
 df.to_excel('../assets/forerunner_245.xlsx', sheet_name = 'forerunner_245', index = False)

@@ -77,7 +77,7 @@ df['hora'] = df['hora'].apply(converter_hora)
 
 df = df.reset_index(drop = True)
 
-# print(df)
+print(df)
 
 # salvar a base
 df.to_excel('../assets/protetor_natura.xlsx', sheet_name = 'protetor_natura', index = False)
