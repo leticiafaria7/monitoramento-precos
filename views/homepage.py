@@ -17,11 +17,24 @@ import dash_bootstrap_components as dbc
 # LAYOUT
 ################################################################################
 
-layout = dbc.Col([
-    dbc.Row([
-        html.H1('Monitoramento de preços', className = 'text-primary')
-    ])
+layout = dbc.Container([
+    html.Br(),
+    dbc.Container([
+        html.H3('Monitoramento de preços', className = 'text-primary', id = 'titulo')
+    ], className = 'jumbotron')
 ])
+
+
+
+
+
+
+
+# dbc.Col([
+#     dbc.Row([
+#         html.H1('Monitoramento de preços', className = 'text-primary')
+#     ])
+# ])
 
 
 
