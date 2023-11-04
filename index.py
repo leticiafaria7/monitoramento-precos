@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from flask_login import logout_user, current_user
 from views import homepage
-# from callbacks import callbacks_gerais, callbacks_navbar, callbacks_sidebar, callbacks_frases
+from callbacks import callbacks_gerais
 from app import app
 import dash_bootstrap_components as dbc
 
@@ -19,13 +19,28 @@ pd.options.mode.chained_assignment = None
 # LAYOUT
 ################################################################################
 
-content = html.Div(id = "page-content")
-
 app.layout = dbc.Container(children=[
     dbc.Row([
         dbc.Col([
             dcc.Location(id='url'),
-            content
+            html.Div(id = "page-content"),
+            html.Div([
+                dbc.RadioItems(
+                    persistence=True,
+                    persistence_type = "local",
+                    id="produtos",
+                    className="btn-group",
+                    inputClassName="btn-check",
+                    labelClassName="btn btn-outline-primary",
+                    labelCheckedClassName="active",
+                    options = [
+                        {'label': 'Protetor solar Natura FPS 50 - Pele normal a oleosa', 'value': 'protetor'},
+                        {'label': 'Garmin Forerunner 245', 'value': 'forerunner 245'},
+                        {'label': 'Garmin Forerunner 255s', 'value': 'forerunner 255s'}
+                    ],
+                    value = 'Protetor solar Natura FPS 50 pele normal a oleosa'
+                )
+            ], hidden=True) 
         ], md=12, style={'background-color':'transparent', 'height':'1080px'})
     ])
 ], fluid = True) # o conteúdo se espalha ao longo da tela

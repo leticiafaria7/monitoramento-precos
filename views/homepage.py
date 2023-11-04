@@ -32,10 +32,10 @@ layout = dbc.Container([
                 dbc.Row([
                     html.Div([
                         dcc.Dropdown(
-                            persistence = True,
-                            persistence_type = 'session',
+                            id = 'produtos',
+                            # persistence = True,
+                            persistence_type = 'local',
                             clearable = False,
-                            id = 'radios',
                             options = [
                                 {'label': 'Protetor solar Natura FPS 50 - Pele normal a oleosa', 'value': 'protetor'},
                                 {'label': 'Garmin Forerunner 245', 'value': 'forerunner 245'},
@@ -55,7 +55,7 @@ layout = dbc.Container([
                             id="my-date-picker-range",
                             placeholder = "dd-mm-yyyy", 
                             value = "01-10-2023", 
-                            persistence = True, 
+                            persistence = True,
                             type = "day", 
                             required = "required",  
                             min = "01-10-2023", 
