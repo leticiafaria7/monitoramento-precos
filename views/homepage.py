@@ -90,7 +90,12 @@ layout = dbc.Container([
             ])
         ]),
         dbc.Row([
-            # gráfico
+            html.Div([
+                dcc.Graph(
+                    id = 'variacao-preco',
+                    config = {'displayModeBar': False}
+                )
+            ], id = "grafico")
         ])
     ], className = 'jumbotron')
 ])
