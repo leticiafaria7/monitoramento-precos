@@ -34,32 +34,32 @@ layout = dbc.Container([
                         dcc.Dropdown(
                             id = 'produtos',
                             # persistence = True,
-                            persistence_type = 'local',
+                            persistence_type = 'session',
                             clearable = False,
                             options = [
-                                {'label': 'Protetor solar Natura FPS 50 - Pele normal a oleosa', 'value': 'protetor'},
-                                {'label': 'Garmin Forerunner 245', 'value': 'forerunner 245'},
-                                {'label': 'Garmin Forerunner 255s', 'value': 'forerunner 255s'}
+                                {'label': 'Protetor solar Natura FPS 50 - Pele normal a oleosa', 'value': 'Protetor solar Natura FPS 50 - Pele normal a oleosa'},
+                                {'label': 'Garmin Forerunner 245', 'value': 'Garmin Forerunner 245'},
+                                {'label': 'Garmin Forerunner 255s', 'value': 'Garmin Forerunner 255s'}
                             ],
-                            value = 'Protetor solar Natura FPS 50 pele normal a oleosa'
+                            value = 'Protetor solar Natura FPS 50 - Pele normal a oleosa'
                         )
                     ], className = 'selecionar-produto')
                 ]),
                 html.Br(),
                 dbc.Row([
-                    dbc.Label('Período disponível: 01/10/2023 → hoje', id = 'label-periodo')
+                    dbc.Label('Selecionar período:', id = 'label-periodo')
                 ]),
                 dbc.Row([
                     html.Div([
                         dbc.Input(
                             id="my-date-picker-range",
                             placeholder = "dd-mm-yyyy", 
-                            value = "01-10-2023", 
+                            value = "2023-10-01", 
                             persistence = True,
-                            type = "day", 
+                            type = "date", 
                             required = "required",  
-                            min = "01-10-2023", 
-                            max = "31-10-2023"
+                            min = "2023-10-01", 
+                            max = "2023-11-01"
                         ),
                         DashIconify(icon="ic:round-arrow-right-alt",
                             color = '#666666',
@@ -67,13 +67,14 @@ layout = dbc.Container([
                             id ="arrowDate"
                         ),
                         dbc.Input(
-                            id="my-date-picker-range2", 
-                            type="day",
-                            value="31-10-2023", 
-                            persistence=True, 
+                            id="my-date-picker-range",
+                            placeholder = "dd-mm-yyyy", 
+                            value = "2023-11-01", 
+                            persistence = True,
+                            type = "date", 
                             required = "required",  
-                            min="01-10-2023", 
-                            max = "31-10-2023"
+                            min = "2023-10-01", 
+                            max = "2023-11-01"
                         )
                     ], id = 'datePicker')
                 ])
@@ -82,7 +83,8 @@ layout = dbc.Container([
                 html.A(
                     html.Img(
                         src="/assets/protetor_foto_sem_fundo.png",
-                        height="200px"
+                        height="200px",
+                        id = 'imagem'
                     ),
                     href = 'https://www.natura.com.br/p/protetor-facial-gel-creme-fps-60-fpuva-20-fotoequilibrio-50-g/103144?listTitle=category%20page%20list%20showcase%20-%20rosto%20-%20protecao%20solar&position=2'
                 )

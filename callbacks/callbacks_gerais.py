@@ -67,48 +67,47 @@ def grafico_variacao_preco(
     if base_dados is not None:
 
         df = base_dados
+
         fig = px.line(
-            data = df, 
-            x = 'data',
-            y = 'preco',
-            width = 1300,
-            height = 600,
-            title = produto,
+            x = df['data'],
+            y = df['preco'],
+            width = 1200,
+            height = 600
+            # title = produto,
             # color_discrete_sequence = ['#c74458', '#76a6f1', '#618e8c', '#df8c37']
         )
         
         fig.update_layout(
-                plot_bgcolor = 'white',
+                plot_bgcolor = 'rgba(0,0,0,0)',
+                paper_bgcolor = 'rgba(0,0,0,0)',
                 xaxis = dict(
                     tickfont = dict(
-                        family = 'Arial',
-                        size = 12,
-                        color = 'rgb(82, 82, 82)'                                   
+                        family = 'Ubuntu',
+                        size = 12   ,
+                        color = 'rgb(82, 82, 82)'                             
                     )
                 ),
                 yaxis = dict(
                     tickfont = dict(
-                        family = 'Arial',
-                        size = 12,
+                        family = 'Ubuntu',
+                        size = 10,
                         color = 'rgb(82, 82, 82)'
                     ),
                 ),
                 legend_title_text = 'Site / cor',
-                yaxis_tickformat = ".2f"
-                            
+                yaxis_tickformat = ".2f",
+                xaxis_gridcolor = '#e4e4e4',
+                yaxis_gridcolor = '#e4e4e4'      
             )
         
         fig.update_traces(line = dict(width = 4))
-        fig.update_xaxes(title_text = 'Data', title_font = dict(size=16, family='Arial'))
-        fig.update_yaxes(title_text = 'Preço', title_font = dict(size=16, family='Arial'), rangemode = "tozero")
+        fig.update_xaxes(title_text = None, title_font = dict(size=16, family='Ubuntu'))
+        fig.update_yaxes(title_text = 'Preço', title_font = dict(size=16, family='Ubuntu'), rangemode = "tozero")
     
     else:
         fig = go.Figure()
     
     return fig
-
-
-
 
 
 
