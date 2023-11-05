@@ -12,6 +12,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dash_iconify import DashIconify
 import numpy as np
+from dash import Dash, dcc, html
 
 ################################################################################
 # BASES DE DADOS
@@ -20,6 +21,7 @@ import numpy as np
 # protetor natura
 protetor_natura = pd.read_excel('assets/protetor_natura.xlsx', engine = 'openpyxl')
 protetor_natura = protetor_natura.groupby(['data'])['preco'].mean().to_frame().reset_index()
+protetor_natura['preco_medio'] = round(protetor_natura['preco'].mean(), 2)
 
 # forerunner 255s
 forerunner_255s = pd.read_excel('assets/forerunner_255s.xlsx', engine = 'openpyxl')
@@ -72,7 +74,8 @@ def grafico_variacao_preco(
             x = df['data'],
             y = df['preco'],
             width = 1200,
-            height = 600
+            height = 400,
+            color_discrete_sequence = ['#5288db']
             # title = produto,
             # color_discrete_sequence = ['#c74458', '#76a6f1', '#618e8c', '#df8c37']
         )
@@ -96,13 +99,18 @@ def grafico_variacao_preco(
                 ),
                 legend_title_text = 'Site / cor',
                 yaxis_tickformat = ".2f",
-                xaxis_gridcolor = '#e4e4e4',
-                yaxis_gridcolor = '#e4e4e4'      
+                xaxis_gridcolor = '#eeeeee',
+                yaxis_gridcolor = '#eeeeee'      
             )
         
         fig.update_traces(line = dict(width = 4))
         fig.update_xaxes(title_text = None, title_font = dict(size=16, family='Ubuntu'))
-        fig.update_yaxes(title_text = 'Preço', title_font = dict(size=16, family='Ubuntu'), rangemode = "tozero")
+        fig.update_yaxes(title_text = 'Preço', title_font = dict(size=13, family='Ubuntu'), rangemode = "tozero")
+        fig.add_trace(px.line(base_dados, 
+                              x='data', 
+                              y='preco_medio',
+                              color_discrete_sequence = ['#b4b4b4'],
+                              line_dash_sequence = ['dash']).data[0])
     
     else:
         fig = go.Figure()
@@ -110,6 +118,41 @@ def grafico_variacao_preco(
     return fig
 
 
+################################################################################
+# IMAGEM
+################################################################################
+
+@app.callback(
+    Output('imagem', 'children'),
+    Input('produtos', 'value')
+)
+
+def mudar_imagem(produto):
+
+    if produto == "Protetor solar Natura FPS 50 - Pele normal a oleosa":
+        
+        imagem_ = html.A(
+            html.Img(
+                src = 'assets/protetor_foto_sem_fundo.png',
+                height = '200px',
+            ), href = 'https://www.natura.com.br/p/protetor-facial-gel-creme-fps-60-fpuva-20-fotoequilibrio-50-g/103144?listTitle=category%20page%20list%20showcase%20-%20rosto%20-%20protecao%20solar&position=2'
+        )
+    
+    if produto == "Garmin Forerunner 245":
+        imagem_ = html.A(
+            html.Img(
+                src = 'assets/forerunner_245_sem_fundo.png',
+                height = '200px',
+            ), href = 'https://www.amazon.com.br/Garmin-Forerunner%C2%AE-Music-smartwatch-corrida/dp/B09WTJ48NB'
+        )
 
 
+    if produto == "Garmin Forerunner 255s":
+        imagem_ = html.A(
+            html.Img(
+                src = 'assets/forerunner_255s_sem_fundo.png',
+                height = '200px',
+            ), href = 'https://www.amazon.com.br/Esportivo-Garmin-Forerunner-Vermelho-Card%C3%ADaco/dp/B07RG5VCFT/ref=d_pd_vtp_sccl_2_3/133-9424469-2772417?pd_rd_w=NFm5C&content-id=amzn1.sym.38f285bf-51cf-4756-b852-81b03b491f92&pf_rd_p=38f285bf-51cf-4756-b852-81b03b491f92&pf_rd_r=Z1M3R65AM1N4RC825E3M&pd_rd_wg=SJiM7&pd_rd_r=956eaa46-c16e-4301-9074-bafe2aa70cc1&pd_rd_i=B07RG5VCFT&th=1'
+        )
 
+    return imagem_

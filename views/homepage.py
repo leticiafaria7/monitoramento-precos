@@ -80,15 +80,7 @@ layout = dbc.Container([
                 ])
             ]),
             dbc.Col([
-                html.A(
-                    html.Img(
-                        src="/assets/protetor_foto_sem_fundo.png",
-                        height="200px",
-                        id = 'imagem'
-                    ),
-                    href = 'https://www.natura.com.br/p/protetor-facial-gel-creme-fps-60-fpuva-20-fotoequilibrio-50-g/103144?listTitle=category%20page%20list%20showcase%20-%20rosto%20-%20protecao%20solar&position=2'
-                )
-                
+                html.Div(id = 'imagem')
             ])
         ]),
         dbc.Row([
