@@ -64,7 +64,7 @@ def grafico_variacao_preco(
     if produto == "Protetor solar Natura FPS 50 - Pele normal a oleosa":
         base_dados = protetor_natura
     
-    if produto == "Garmin Forerunner 245":
+    if produto == "Garmin Forerunner 255s":
         base_dados = forerunner_255s
 
     if produto == "Garmin Forerunner 245":
