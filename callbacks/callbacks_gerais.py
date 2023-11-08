@@ -1,7 +1,7 @@
 
-################################################################################
+#####################################################################################################################################
 # BIBLIOTECAS
-################################################################################
+#####################################################################################################################################
 
 from app import app
 from dash.exceptions import PreventUpdate
@@ -14,20 +14,24 @@ from dash_iconify import DashIconify
 import numpy as np
 from dash import Dash, dcc, html
 
-################################################################################
+#####################################################################################################################################
 # BASES DE DADOS
-################################################################################
+#####################################################################################################################################
 
 # protetor natura
 protetor_natura = pd.read_excel('assets/protetor_natura.xlsx', engine = 'openpyxl')
 protetor_natura = protetor_natura.groupby(['data'])['preco'].mean().to_frame().reset_index()
 protetor_natura['preco_medio'] = round(protetor_natura['preco'].mean(), 2)
+protetor_natura['site_cor'] = 'natura'
 
 # forerunner 255s
 forerunner_255s = pd.read_excel('assets/forerunner_255s.xlsx', engine = 'openpyxl')
 forerunner_255s['site_cor'] = forerunner_255s['site'] + " - " + forerunner_255s['cor']
+forerunner_255s = forerunner_255s[forerunner_255s['cor'] == 'preto']
 forerunner_255s = forerunner_255s.groupby(['data', 'site_cor'])['preco'].mean().to_frame().reset_index()
 forerunner_255s = forerunner_255s[forerunner_255s['preco'] != 0]
+# forerunner_255s['preco_medio'] = round(forerunner_255s.groupby('site')['preco'].transform('mean'), 2)
+forerunner_255s['preco_medio'] = round(forerunner_255s['preco'].mean(), 2)
 
 # forerunner 245
 forerunner_245 = pd.read_excel('assets/forerunner_245.xlsx', engine = 'openpyxl')
@@ -36,9 +40,9 @@ forerunner_245 = forerunner_245[~forerunner_245['hora'].isna()]
 forerunner_245 = forerunner_245.groupby(['data', 'site_cor'])['preco'].mean().to_frame().reset_index()
 forerunner_245['preco_medio'] = round(forerunner_245['preco'].mean(), 2)
 
-################################################################################
+#####################################################################################################################################
 # GRÁFICO
-################################################################################
+#####################################################################################################################################
 
 @app.callback(
     Output('variacao-preco', 'figure'),
@@ -73,11 +77,11 @@ def grafico_variacao_preco(
         fig = px.line(
             x = df['data'],
             y = df['preco'],
+            color = df['site_cor'],
             width = 1200,
             height = 400,
-            color_discrete_sequence = ['#5288db']
-            # title = produto,
-            # color_discrete_sequence = ['#c74458', '#76a6f1', '#618e8c', '#df8c37']
+            color_discrete_sequence = ['#3860A5', '#C74458']
+            # title = produto
         )
         
         fig.update_layout(
@@ -106,7 +110,7 @@ def grafico_variacao_preco(
         fig.update_traces(line = dict(width = 4))
         fig.update_xaxes(title_text = None, title_font = dict(size=16, family='Ubuntu'))
         fig.update_yaxes(title_text = 'Preço', title_font = dict(size=13, family='Ubuntu'), rangemode = "tozero")
-        fig.add_trace(px.line(base_dados, 
+        fig.add_trace(px.line(df, 
                               x='data', 
                               y='preco_medio',
                               color_discrete_sequence = ['#b4b4b4'],
@@ -118,9 +122,9 @@ def grafico_variacao_preco(
     return fig
 
 
-################################################################################
+#####################################################################################################################################
 # IMAGEM
-################################################################################
+#####################################################################################################################################
 
 @app.callback(
     Output('imagem', 'children'),
